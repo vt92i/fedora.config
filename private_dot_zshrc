@@ -1,0 +1,200 @@
+# -----------------
+# Zsh configuration
+# -----------------
+
+#
+# History
+#
+
+# Remove older command from the history if a duplicate is to be added.
+# This keeps the history clean and avoids duplicate entries for the same command.
+setopt HIST_IGNORE_ALL_DUPS
+
+#
+# Input/output
+#
+
+# Set the default keymap for the command-line editor.
+# Options: `-e` for emacs keybindings, `-v` for vi keybindings.
+bindkey -e
+
+# Remove the path separator ('/') from the list of word characters.
+# This ensures that '/' is treated as a word boundary during word navigation.
+WORDCHARS=${WORDCHARS//[\/]}
+
+# -----------------
+# Zim configuration
+# -----------------
+
+# --------------------
+# Module configuration
+# --------------------
+
+#
+# zsh-autosuggestions
+#
+
+# Disable automatic widget re-binding on each `precmd` to optimize performance.
+# Only applicable when `zsh-autosuggestions` is the last module in your ~/.zimrc.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+# Customize how suggestions are displayed (commented out by default).
+# For reference: https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
+# ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+
+#
+# zsh-syntax-highlighting
+#
+
+# Define which highlighters to use for syntax highlighting.
+# For options, see: https://github.com/zsh-users/zsh-syntax-highlighting/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# Customize styles for the main highlighter (commented out by default).
+# For detailed customization: https://github.com/zsh-users/zsh-syntax-highlighting/docs/highlighters/main.md
+# typeset -A ZSH_HIGHLIGHT_STYLES
+# ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+
+# ------------------
+# Initialize modules
+# ------------------
+
+# Define the Zim home directory.
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+
+# Download zimfw plugin manager if it's missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  if (( ${+commands[curl]} )); then
+    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
+fi
+
+# Install missing modules and update init.zsh if necessary.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+
+# Load initialized Zim modules.
+source ${ZIM_HOME}/init.zsh
+
+# ------------------------------
+# Post-init module configuration
+# ------------------------------
+
+#
+# fzf-tab
+#
+
+# Add custom completions to fpath.
+fpath=($HOME/.zsh/completions $fpath)
+
+# Initialize Zsh's completion system.
+autoload -U compinit; compinit
+
+# Enable caching
+zstyle ':completion::complete:*' use-cache on
+
+# Disable sorting when completing `git checkout` commands to preserve commit order.
+zstyle ':completion:*:git-checkout:*' sort false
+
+# Set the format for completion descriptions to enable grouping support.
+zstyle -d ':completion:*' format
+zstyle ':completion:*:descriptions' format '[%d]'
+
+# Enable filename colorization using `LS_COLORS`.
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+# Suppress the default completion menu, allowing `fzf-tab` to handle the prefix.
+zstyle ':completion:*' menu no
+
+# Insert a TAB character instead of performing completion when left buffer is empty.
+zstyle ':completion:*' insert-tab false
+
+# Use `eza` to preview directory contents when completing `cd`.
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+
+# Define custom `fzf` flags for enhanced completion.
+zstyle ':fzf-tab:*' fzf-flags --color=fg:1,fg+:2 --bind=tab:accept
+
+# Allow `fzf-tab` to follow `FZF_DEFAULT_OPTS`.
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
+# Configure keys for switching groups in `fzf-tab`.
+zstyle ':fzf-tab:*' switch-group '<' '>'
+
+# ------------------
+# Environment settings
+# ------------------
+
+# Extend the PATH to include local binaries.
+export PATH=$PATH:$HOME/.local/bin
+
+# Set Neovim as the default editor.
+export EDITOR="nvim"
+
+# -----------------
+# Load Aliases
+# -----------------
+
+source ~/.aliases
+
+# -----------------
+# fzf Configuration
+# -----------------
+
+# Customize the appearance and behavior of fzf with a Tokyo Night theme.
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+  --highlight-line \
+  --info=inline-right \
+  --ansi \
+  --layout=reverse \
+  --border=none \
+  --color=bg+:#283457 \
+  --color=bg:#16161e \
+  --color=border:#27a1b9 \
+  --color=fg:#c0caf5 \
+  --color=gutter:#16161e \
+  --color=header:#ff9e64 \
+  --color=hl+:#2ac3de \
+  --color=hl:#2ac3de \
+  --color=info:#545c7e \
+  --color=marker:#ff007c \
+  --color=pointer:#ff007c \
+  --color=prompt:#2ac3de \
+  --color=query:#c0caf5:regular \
+  --color=scrollbar:#27a1b9 \
+  --color=separator:#ff9e64 \
+  --color=spinner:#ff007c \
+"
+
+# -----------------
+# Additional Tools
+# -----------------
+
+# Initialize Zoxide for smart directory jumping.
+eval "$(zoxide init zsh)"
+
+# Source Atuin environment setup script.
+. "$HOME/.atuin/bin/env"
+
+# Initialize Atuin for Zsh.
+eval "$(atuin init zsh)"
+
+# Initialize pnpm.
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
+# Initialize bun.
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Initialize Oh My Posh for terminal prompt customization.
+eval "$(oh-my-posh init zsh --config ~/.config/ompz/tk.toml)"

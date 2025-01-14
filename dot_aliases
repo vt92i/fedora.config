@@ -1,0 +1,20 @@
+# -----------------
+# Aliases
+# -----------------
+
+# Replace `cat` with the enhanced `bat` command for file viewing.
+alias cat="bat"
+
+# Use `z` for smart directory navigation.
+alias cd="z"
+
+# Replace `ls` with `eza` for better file listing.
+alias ls="eza --color=always"
+alias l="eza -lg -s type -h -uU --octal-permissions --icons --color=always"
+alias ll="eza -lag -s type -h -uU --octal-permissions --icons --color=always"
+
+# Shorten common Git commands.
+alias g="git"
+
+# Alias for Zellij terminal workspace manager.
+alias zj="zellij"
