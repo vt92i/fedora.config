@@ -1,0 +1,12 @@
+cursor-style = block
+cursor-style-blink = false
+desktop-notifications = false
+font-family = "JetBrainsMono Nerd Font"
+gtk-adwaita = false
+shell-integration-features = no-cursor
+theme = tokyonight
+window-decoration = false
+window-height = 1000
+window-width = 1000
+window-padding-x = 7
+window-padding-y = 7

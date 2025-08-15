@@ -1,9 +1,6 @@
----@diagnostic disable: different-requires
-
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = " "
 
--- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
 if not vim.uv.fs_stat(lazypath) then
@@ -13,9 +10,8 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-local lazy_config = require "configs.lazy"
+local lazy_config = require "config.lazy"
 
--- load plugins
 require("lazy").setup({
   {
     "NvChad/NvChad",
@@ -27,14 +23,13 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
--- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
-require "options"
+require "config.options"
+require "config.autocmds"
 require "nvchad.autocmds"
-require "autocmds"
 
 vim.schedule(function()
-  require "mappings"
+  require "config.keymaps"
 end)

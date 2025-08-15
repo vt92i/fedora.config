@@ -16,5 +16,8 @@ alias ll="eza -lag -s type -h -uU --octal-permissions --icons --color=always"
 # Shorten common Git commands.
 alias g="git"
 
+# Alias for `nvim`
+alias nv="nvim"
+
 # Alias for Zellij terminal workspace manager.
 alias zj="zellij"

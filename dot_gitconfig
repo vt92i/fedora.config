@@ -1,0 +1,69 @@
+# User information
+[user]
+  name = flofi
+  email = benidiktusvio@gmail.com
+  signingKey = 397E5F1FD5C84AA379289A5EA61AB352C54F3116
+
+# Always sign commits with GPG
+[commit]
+  gpgSign = true
+
+# Set the default branch name for new repositories
+[init]
+  defaultBranch = main
+
+# Store credentials unencrypted on disk
+[credential]
+  helper = store
+
+# Automatically set the remote on push
+[push]
+  autoSetupRemote = true
+
+# Force GPG signing for annotated tags
+[tag]
+  forceSignAnnotated = true
+
+# Use delta as the pager for all Git output
+[core]
+  pager = delta
+
+# Use delta for interactive diff viewing
+[interactive]
+  diffFilter = delta --color-only
+
+# Configuration options for delta (diff viewer)
+[delta]
+  navigate = true               # Enable navigation (hunks/jumps)
+  light = false                 # Use dark theme
+  side-by-side = true           # Display diffs side-by-side
+
+# Configure merge conflict style
+[merge]
+  conflictstyle = diff3         # Show base version in conflicts
+
+# Configure diff color styling
+[diff]
+  colorMoved = default
+
+  # Minus line styles
+  minus-style = syntax "#37222c"
+  minus-non-emph-style = syntax "#37222c"
+  minus-emph-style = syntax "#713137"
+  minus-empty-line-marker-style = syntax "#37222c"
+  line-numbers-minus-style = "#914c54"
+
+  # Plus line styles
+  plus-style = syntax "#20303b"
+  plus-non-emph-style = syntax "#20303b"
+  plus-emph-style = syntax "#2c5a66"
+  plus-empty-line-marker-style = syntax "#20303b"
+  line-numbers-plus-style = "#449dab"
+
+  # Line number style for unchanged lines
+  line-numbers-zero-style = "#3b4261"
+
+# Always show all untracked files in `git status`
+[status]
+  showUntrackedFiles = all
+

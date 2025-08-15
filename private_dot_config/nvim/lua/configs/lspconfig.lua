@@ -5,18 +5,41 @@ local nvlsp = require "nvchad.configs.lspconfig"
 
 local servers = {
   bashls = {},
-  -- fish_lsp = {},
+  fish_lsp = {},
 
-  -- cmake = {},
-  meson = {},
+  cmake = {},
+  -- meson = {},
 
   clangd = {
+    cmd = {
+      "clangd",
+      "-j=8",
+      "--all-scopes-completion",
+      "--background-index",
+      "--clang-tidy",
+      "--completion-style=detailed",
+      "--header-insertion-decorators=false",
+      "--header-insertion=iwyu",
+      "--limit-references=1024",
+      "--limit-results=512",
+      "--log=info",
+      "--offset-encoding=utf-16",
+      "--pch-storage=memory",
+    },
     filetypes = {
       "c",
       "cpp",
-      -- "proto",
     },
   },
+
+  -- ccls = {
+  --   init_options = {
+  --     compilationDatabaseDirectory = "build",
+  --     index = {
+  --       threads = 0,
+  --     },
+  --   },
+  -- },
 
   docker_compose_language_service = {},
   dockerls = {},
@@ -24,6 +47,8 @@ local servers = {
   dartls = {},
   gopls = {},
   rust_analyzer = {},
+  ruff = {},
+  pyright = {},
   zls = {},
 
   lua_ls = {
@@ -55,7 +80,13 @@ local servers = {
 
   html = {},
   cssls = {},
-  tailwindcss = {},
+  tailwindcss = {
+    filetypes = {
+      "javascriptreact",
+      "typescriptreact",
+      "svelte",
+    },
+  },
 
   eslint = {},
   svelte = {},
@@ -74,15 +105,16 @@ local on_attach = function(client, bufnr)
 
   nomap("n", "gD", { buffer = bufnr })
   nomap("n", "gd", { buffer = bufnr })
-  nomap("n", "gi", { buffer = bufnr })
-  nomap("n", "<leader>sh", { buffer = bufnr })
+  -- nomap("n", "gi", { buffer = bufnr })
+  -- nomap("n", "<leader>sh", { buffer = bufnr })
   nomap("n", "<leader>wa", { buffer = bufnr })
   nomap("n", "<leader>wr", { buffer = bufnr })
   nomap("n", "<leader>wl", { buffer = bufnr })
   nomap("n", "<leader>D", { buffer = bufnr })
   nomap("n", "<leader>ra", { buffer = bufnr })
-  nomap("n", "gr", { buffer = bufnr })
+  -- nomap("n", "gr", { buffer = bufnr })
 
+  map("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { buffer = bufnr, desc = "Code action" })
   map("n", "<leader>lD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { buffer = bufnr, desc = "LSP Go to declaration" })
   map(
     "n",
@@ -124,8 +156,8 @@ local on_attach = function(client, bufnr)
 end
 
 for name, opts in pairs(servers) do
-  opts.on_init = nvlsp.on_init
   opts.on_attach = on_attach
+  opts.on_init = nvlsp.on_init
   opts.capabilities = nvlsp.capabilities
 
   lspconfig[name].setup(opts)

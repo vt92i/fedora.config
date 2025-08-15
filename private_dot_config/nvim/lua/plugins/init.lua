@@ -2,6 +2,23 @@
 
 return {
   {
+    "folke/which-key.nvim",
+    lazy = false,
+  },
+
+  {
+    "nvim-tree/nvim-tree.lua",
+    enabled = false,
+  },
+
+  {
+    "stevearc/oil.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy = false,
+    config = require "configs.oil",
+  },
+
+  {
     "folke/noice.nvim",
     event = "VeryLazy",
     opts = require "configs.noice",
@@ -20,8 +37,17 @@ return {
   },
 
   {
+    "folke/trouble.nvim",
+    opts = {},
+    cmd = "Trouble",
+  },
+
+  {
     "nvim-treesitter/nvim-treesitter",
     opts = require "configs.treesitter",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+    },
   },
 
   {
@@ -31,17 +57,12 @@ return {
 
   {
     "HiPhish/rainbow-delimiters.nvim",
+    config = function()
+      dofile(vim.g.base46_cache .. "rainbowdelimiters")
+      require("rainbow-delimiters.setup").setup()
+    end,
     event = { "BufReadPost", "BufNewFile" },
   },
-
-  -- {
-  --   "windwp/nvim-ts-autotag",
-  --   event = { "BufReadPre", "BufNewFile" },
-  -- },
-
-  -- {
-  --   "mfussenegger/nvim-lint",
-  -- },
 
   {
     "stevearc/conform.nvim",
@@ -52,51 +73,53 @@ return {
   {
     "L3MON4D3/LuaSnip",
     build = "make install_jsregexp",
-    opts = {},
   },
 
   {
     "folke/flash.nvim",
     event = "VeryLazy",
     opts = {},
-    -- stylua: ignore
-    -- keys = {
-    --   { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-    --   { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-    --   { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-    --   { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-    --   { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-    -- },
   },
 
-  -- {
-  --   "MagicDuck/grug-far.nvim",
-  -- },
-
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
     config = function()
-      require("copilot").setup {
-        suggestion = {
-          auto_trigger = true,
-          keymap = {
-            accept = "<Tab>",
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-]>",
-          },
-        },
-        panel = { enabled = true },
-      }
+      require("nvim-surround").setup {}
     end,
   },
 
-  -- {
-  --   "CopilotC-Nvim/CopilotChat.nvim",
-  --   build = "make tiktoken",
-  --   opts = {
-  --   },
-  -- },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    event = "BufReadPost",
+    opts = require "configs.render-markdown",
+  },
+
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    cmd = "Copilot",
+    opts = require "configs.copilot",
+  },
+
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    event = "BufReadPost",
+    build = "make tiktoken",
+    opts = require "configs.copilot-chat",
+  },
+
+  {
+    "IogaMaster/neocord",
+    event = "VeryLazy",
+    opts = {
+      log_level = "error",
+    },
+  },
+
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    config = require "configs.persistence",
+  },
 }

@@ -2,6 +2,7 @@
 local M = {}
 
 M.base46 = {
+  integrations = { "blink", "rainbowdelimiters", "render-markdown", "trouble" },
   theme = "tokyodark",
 }
 
@@ -11,9 +12,13 @@ M.ui = {
     separator_style = "block",
   },
   tabufline = {
-    -- lazyload = false,
-    order = { "treeOffset", "buffers" },
+    lazyload = false,
+    order = { "treeOffset", "buffers", "tabs" },
   },
+}
+
+M.lsp = {
+  signature = false,
 }
 
 M.nvdash = {

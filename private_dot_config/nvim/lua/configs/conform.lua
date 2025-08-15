@@ -6,7 +6,6 @@ local options = {
     bash = { "shfmt" },
     sh = { "shfmt" },
 
-    dart = { "dart_format" },
     go = { "gofmt" },
     rust = { "rustfmt" },
     zig = { "zigfmt" },

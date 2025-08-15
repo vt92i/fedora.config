@@ -6,6 +6,14 @@ local nomap = vim.keymap.del
 
 -- map("n", ";", ":", { desc = "Enter command mode" })
 
+map("n", "<leader>e", function()
+  require("oil").open_float()
+end, { desc = "oil focus" })
+
+map("n", "<C-n>", function()
+  require("oil").toggle_float()
+end, { desc = "oil toggle" })
+
 map("n", "<leader>bn", "<cmd>enew<cr>", { desc = "buffer new" })
 map("n", "<leader>bd", function()
   require("nvchad.tabufline").close_buffer()

@@ -9,7 +9,7 @@ local options = {
       ["cmp.entry.get_documentation"] = true,
     },
     signature = {
-      enabled = false,
+      enabled = true,
     },
   },
   presets = {
@@ -17,7 +17,21 @@ local options = {
     command_palette = true,
     long_message_to_split = true,
     inc_rename = false,
-    lsp_doc_border = false,
+    lsp_doc_border = true,
+  },
+  routes = {
+    {
+      view = "notify",
+      filter = { event = "msg_showmode" },
+    },
+    {
+      view = "notify",
+      filter = {
+        event = "msg_show",
+        kind = "bufwrite",
+      },
+      -- opts = { skip = false },
+    },
   },
 }
 
