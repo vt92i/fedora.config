@@ -19,7 +19,7 @@ config.keys = {
 	{ key = "V", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
 }
 config.window_background_opacity = 0.98
-config.window_decorations = "TITLE | RESIZE"
+config.window_decorations = "RESIZE"
 config.window_padding = {
 	left = "0.5cell",
 	right = "0.5cell",
